@@ -1,3 +1,5 @@
+import os
+
 from .common import InfoExtractor
 from ..utils import (
     ExtractorError,
@@ -9,7 +11,7 @@ from ..utils import (
 
 
 class CybraryBaseIE(InfoExtractor):
-    _API_KEY = 'AIzaSyCX9ru6j70PX2My1Eq6Q1zoMAhuTdXlzSw'
+    _API_KEY = os.environ.get('CYBRARY_API_KEY')
     _ENDPOINTS = {
         'course': 'https://app.cybrary.it/courses/api/catalog/browse/course/{}',
         'course_enrollment': 'https://app.cybrary.it/courses/api/catalog/{}/enrollment',
@@ -21,6 +23,8 @@ class CybraryBaseIE(InfoExtractor):
     _TOKEN = None
 
     def _perform_login(self, username, password):
+        if not self._API_KEY:
+            raise ExtractorError('CYBRARY_API_KEY environment variable is not set', expected=True)
         CybraryBaseIE._TOKEN = self._download_json(
             f'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={self._API_KEY}',
             None, data=urlencode_postdata({'email': username, 'password': password, 'returnSecureToken': True}),
