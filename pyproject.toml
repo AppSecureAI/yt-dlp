@@ -113,7 +113,7 @@ static-analysis = [
     "ruff~=0.15.0",
 ]
 test = [
-    "pytest~=8.1",
+    "pytest>=8.1,<10.0",
     "pytest-rerunfailures~=14.0",
 ]
 dev = [
