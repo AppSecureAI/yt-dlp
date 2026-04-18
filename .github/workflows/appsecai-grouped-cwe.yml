@@ -1,0 +1,30 @@
+name: AppSecAI Grouped (CWE Category)
+
+permissions:
+  contents: read
+  id-token: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scan-and-remediate:
+    runs-on: ubuntu-latest
+    env:
+      PROCESSING_MODE: group_cc
+      AUTO_CREATE_PRS: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run OpenGrep
+        run: |
+          pip install opengrep
+          opengrep scan --config auto --sarif --output opengrep-results.sarif .
+
+      - name: AppSecAI
+        uses: AppSecureAI/automation-action@v1
+        with:
+          file: opengrep-results.sarif
