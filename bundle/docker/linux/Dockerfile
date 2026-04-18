@@ -13,4 +13,6 @@ FROM $VERIFYIMAGE AS verify
 
 WORKDIR /testing
 COPY verify.sh /verify.sh
+RUN chmod +x /verify.sh && chown nobody /testing
+USER nobody
 ENTRYPOINT ["/verify.sh"]
