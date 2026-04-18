@@ -28,14 +28,14 @@ class PlutoTVIE(InfoExtractor):
     _INFO_QUERY_PARAMS = {
         'appName': 'web',
         'appVersion': 'na',
-        'clientID': str(uuid.uuid1()),
+        'clientID': str(uuid.uuid4()),
         'clientModelNumber': 'na',
         'serverSideAds': 'false',
         'deviceMake': 'unknown',
         'deviceModel': 'web',
         'deviceType': 'web',
         'deviceVersion': 'unknown',
-        'sid': str(uuid.uuid1()),
+        'sid': str(uuid.uuid4()),
     }
     _TESTS = [
         {
