@@ -7,7 +7,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-03-26T20:49:31.648697851Z"
+exclude-newer = "2026-04-11T22:59:07.640440078Z"
 exclude-newer-span = "P7D"
 
 [options.exclude-newer-package]
@@ -789,7 +789,7 @@ wheels = [
 
 [[package]]
 name = "pytest"
-version = "8.4.2"
+version = "9.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
@@ -800,9 +800,9 @@ dependencies = [
     { name = "pygments" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a3/5c/00a0e072241553e1a7496d638deababa67c5058571567b92a7eaa258397c/pytest-8.4.2.tar.gz", hash = "sha256:86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01", size = 1519618, upload-time = "2025-09-04T14:34:22.711Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/0d/549bd94f1a0a402dc8cf64563a117c0f3765662e2e668477624baeec44d5/pytest-9.0.3.tar.gz", hash = "sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c", size = 1572165, upload-time = "2026-04-07T17:16:18.027Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/a4/20da314d277121d6534b3a980b29035dcd51e6744bd79075a6ce8fa4eb8d/pytest-8.4.2-py3-none-any.whl", hash = "sha256:872f880de3fc3a5bdc88a11b39c9710c3497a547cfa9320bc3c5e62fbf272e79", size = 365750, upload-time = "2025-09-04T14:34:20.226Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/24/a372aaf5c9b7208e7112038812994107bc65a84cd00e0354a88c2c77a617/pytest-9.0.3-py3-none-any.whl", hash = "sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9", size = 375249, upload-time = "2026-04-07T17:16:16.13Z" },
 ]
 
 [[package]]
@@ -1166,6 +1166,42 @@ default = [
 deno = [
     { name = "deno" },
 ]
+pin = [
+    { name = "brotli", marker = "implementation_name == 'cpython' and sys_platform != 'ios'" },
+    { name = "brotlicffi", marker = "implementation_name != 'cpython'" },
+    { name = "certifi" },
+    { name = "cffi", marker = "implementation_name != 'cpython'" },
+    { name = "charset-normalizer" },
+    { name = "idna" },
+    { name = "mutagen" },
+    { name = "pycparser", marker = "implementation_name != 'PyPy' and implementation_name != 'cpython'" },
+    { name = "pycryptodomex" },
+    { name = "requests" },
+    { name = "urllib3" },
+    { name = "websockets" },
+    { name = "yt-dlp-ejs" },
+]
+pin-curl-cffi = [
+    { name = "certifi", marker = "implementation_name == 'cpython'" },
+    { name = "cffi", marker = "implementation_name == 'cpython'" },
+    { name = "curl-cffi", marker = "implementation_name == 'cpython'" },
+    { name = "markdown-it-py", marker = "implementation_name == 'cpython'" },
+    { name = "mdurl", marker = "implementation_name == 'cpython'" },
+    { name = "pycparser", marker = "implementation_name == 'cpython'" },
+    { name = "pygments", marker = "implementation_name == 'cpython'" },
+    { name = "rich", marker = "implementation_name == 'cpython'" },
+]
+pin-deno = [
+    { name = "deno" },
+]
+pin-secretstorage = [
+    { name = "cffi", marker = "platform_python_implementation != 'PyPy'" },
+    { name = "cryptography" },
+    { name = "jeepney" },
+    { name = "pycparser", marker = "implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'" },
+    { name = "secretstorage" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
 secretstorage = [
     { name = "secretstorage" },
 ]
@@ -1200,19 +1236,47 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "brotli", marker = "implementation_name == 'cpython' and sys_platform != 'ios' and extra == 'default'" },
+    { name = "brotli", marker = "implementation_name == 'cpython' and sys_platform != 'ios' and extra == 'pin'", specifier = "==1.2.0" },
     { name = "brotlicffi", marker = "implementation_name != 'cpython' and extra == 'default'" },
+    { name = "brotlicffi", marker = "implementation_name != 'cpython' and extra == 'pin'", specifier = "==1.2.0.1" },
+    { name = "certifi", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==2026.2.25" },
     { name = "certifi", marker = "extra == 'default'" },
+    { name = "certifi", marker = "extra == 'pin'", specifier = "==2026.2.25" },
+    { name = "cffi", marker = "platform_python_implementation != 'PyPy' and extra == 'pin-secretstorage'", specifier = "==2.0.0" },
+    { name = "cffi", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==2.0.0" },
+    { name = "cffi", marker = "implementation_name != 'cpython' and extra == 'pin'", specifier = "==2.0.0" },
+    { name = "charset-normalizer", marker = "extra == 'pin'", specifier = "==3.4.6" },
+    { name = "cryptography", marker = "extra == 'pin-secretstorage'", specifier = "==46.0.6" },
     { name = "curl-cffi", marker = "implementation_name == 'cpython' and extra == 'curl-cffi'", specifier = ">=0.5.10,!=0.6.*,!=0.7.*,!=0.8.*,!=0.9.*,<0.16" },
+    { name = "curl-cffi", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==0.15.0" },
     { name = "deno", marker = "extra == 'deno'", specifier = ">=2.6.6" },
+    { name = "deno", marker = "extra == 'pin-deno'", specifier = "==2.7.8" },
+    { name = "idna", marker = "extra == 'pin'", specifier = "==3.11" },
+    { name = "jeepney", marker = "extra == 'pin-secretstorage'", specifier = "==0.9.0" },
+    { name = "markdown-it-py", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==4.0.0" },
+    { name = "mdurl", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==0.1.2" },
     { name = "mutagen", marker = "extra == 'default'" },
+    { name = "mutagen", marker = "extra == 'pin'", specifier = "==1.47.0" },
+    { name = "pycparser", marker = "implementation_name != 'PyPy' and platform_python_implementation != 'PyPy' and extra == 'pin-secretstorage'", specifier = "==3.0" },
+    { name = "pycparser", marker = "implementation_name != 'PyPy' and implementation_name != 'cpython' and extra == 'pin'", specifier = "==3.0" },
+    { name = "pycparser", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==3.0" },
     { name = "pycryptodomex", marker = "extra == 'default'" },
+    { name = "pycryptodomex", marker = "extra == 'pin'", specifier = "==3.23.0" },
+    { name = "pygments", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==2.19.2" },
     { name = "requests", marker = "extra == 'default'", specifier = ">=2.32.2,<3" },
+    { name = "requests", marker = "extra == 'pin'", specifier = "==2.33.0" },
+    { name = "rich", marker = "implementation_name == 'cpython' and extra == 'pin-curl-cffi'", specifier = "==14.3.3" },
+    { name = "secretstorage", marker = "extra == 'pin-secretstorage'", specifier = "==3.5.0" },
     { name = "secretstorage", marker = "extra == 'secretstorage'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' and extra == 'pin-secretstorage'", specifier = "==4.15.0" },
     { name = "urllib3", marker = "extra == 'default'", specifier = ">=2.0.2,<3" },
+    { name = "urllib3", marker = "extra == 'pin'", specifier = "==2.6.3" },
     { name = "websockets", marker = "extra == 'default'", specifier = ">=13.0" },
+    { name = "websockets", marker = "extra == 'pin'", specifier = "==16.0" },
     { name = "yt-dlp-ejs", marker = "extra == 'default'", specifier = "==0.8.0" },
+    { name = "yt-dlp-ejs", marker = "extra == 'pin'", specifier = "==0.8.0" },
 ]
-provides-extras = ["curl-cffi", "default", "deno", "secretstorage"]
+provides-extras = ["curl-cffi", "default", "deno", "pin", "pin-curl-cffi", "pin-deno", "pin-secretstorage", "secretstorage"]
 
 [package.metadata.requires-dev]
 build = [
@@ -1223,7 +1287,7 @@ delocate = [{ name = "delocate", marker = "sys_platform == 'darwin'", specifier 
 dev = [
     { name = "autopep8", specifier = "~=2.0" },
     { name = "pre-commit" },
-    { name = "pytest", specifier = "~=8.1" },
+    { name = "pytest", specifier = ">=8.1,<10.0" },
     { name = "pytest-rerunfailures", specifier = "~=14.0" },
     { name = "ruff", specifier = "~=0.15.0" },
 ]
@@ -1233,7 +1297,7 @@ static-analysis = [
     { name = "ruff", specifier = "~=0.15.0" },
 ]
 test = [
-    { name = "pytest", specifier = "~=8.1" },
+    { name = "pytest", specifier = ">=8.1,<10.0" },
     { name = "pytest-rerunfailures", specifier = "~=14.0" },
 ]
 
