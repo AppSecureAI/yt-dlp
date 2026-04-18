@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 
 from .anvato import AnvatoIE
 from .aws import AWSIE
@@ -46,7 +47,7 @@ class ScrippsNetworksWatchIE(AWSIE):
         'geniuskitchen': 'genius',
     }
 
-    _AWS_API_KEY = 'E7wSQmq0qK6xPrF13WmzKiHo4BQ7tip4pQcSXVl1'
+    _AWS_API_KEY = os.environ.get('SCRIPPS_AWS_API_KEY')
     _AWS_PROXY_HOST = 'web.api.video.snidigital.com'
 
     _AWS_USER_AGENT = 'aws-sdk-js/2.80.0 callback'
