@@ -5,12 +5,16 @@ ARG VERIFYIMAGE=alpine:3.22
 FROM $BUILDIMAGE AS build
 
 WORKDIR /yt-dlp
-COPY build.sh /build.sh
+COPY --chown=nobody:nobody build.sh /build.sh
+RUN chown -R nobody:nobody /yt-dlp
+USER nobody
 ENTRYPOINT ["/build.sh"]
 
 
 FROM $VERIFYIMAGE AS verify
 
 WORKDIR /testing
-COPY verify.sh /verify.sh
+COPY --chown=nobody:nobody verify.sh /verify.sh
+RUN chown -R nobody:nobody /testing
+USER nobody
 ENTRYPOINT ["/verify.sh"]
