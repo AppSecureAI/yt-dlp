@@ -1,4 +1,5 @@
 import json
+import os
 import urllib.parse
 import uuid
 
@@ -54,7 +55,7 @@ class FOXIE(InfoExtractor):
     }]
     _GEO_BYPASS = False
     _HOME_PAGE_URL = 'https://www.fox.com/'
-    _API_KEY = '6E9S4bmcoNnZwVLOHywOv8PJEdu76cM9'
+    _API_KEY = os.environ.get('FOX_API_KEY')
     _access_token = None
     _device_id = str(uuid.uuid4())
 
@@ -82,6 +83,10 @@ class FOXIE(InfoExtractor):
             raise
 
     def _real_initialize(self):
+        if not self._API_KEY:
+            raise ExtractorError(
+                'FOX_API_KEY environment variable is not set',
+                expected=True)
         if not self._access_token:
             mvpd_auth = self._get_cookies(self._HOME_PAGE_URL).get('mvpd-auth')
             if mvpd_auth:
