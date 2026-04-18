@@ -1,7 +1,9 @@
 import json
+import os
 
 from .common import InfoExtractor
 from ..utils import (
+    ExtractorError,
     clean_html,
     int_or_none,
     try_get,
@@ -12,6 +14,7 @@ from ..utils import (
 
 class AmericasTestKitchenIE(InfoExtractor):
     _VALID_URL = r'https?://(?:www\.)?(?:americastestkitchen|cooks(?:country|illustrated))\.com/(?:cooks(?:country|illustrated)/)?(?P<resource_type>episode|videos)/(?P<id>\d+)'
+    _ZYPE_API_KEY = os.environ.get('ATK_ZYPE_API_KEY')
     _TESTS = [{
         'url': 'https://www.americastestkitchen.com/episode/582-weeknight-japanese-suppers',
         'md5': 'b861c3e365ac38ad319cfd509c30577f',
@@ -91,9 +94,12 @@ class AmericasTestKitchenIE(InfoExtractor):
         video = resource['video'] if is_episode else resource
         episode = resource if is_episode else resource.get('episode') or {}
 
+        if not self._ZYPE_API_KEY:
+            raise ExtractorError('ATK_ZYPE_API_KEY environment variable is not set', expected=True)
+
         return {
             '_type': 'url_transparent',
-            'url': 'https://player.zype.com/embed/{}.js?api_key=jZ9GUhRmxcPvX7M3SlfejB6Hle9jyHTdk2jVxG7wOHPLODgncEKVdPYBhuz9iWXQ'.format(video['zypeId']),
+            'url': 'https://player.zype.com/embed/{}.js?api_key={}'.format(video['zypeId'], self._ZYPE_API_KEY),
             'ie_key': 'Zype',
             'description': clean_html(video.get('description')),
             'timestamp': unified_timestamp(video.get('publishDate')),
