@@ -76,6 +76,9 @@ def run_process(*args, **kwargs):
 
 
 def request(url: str, *, headers: dict | None = None):
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ('http', 'https'):
+        raise ValueError(f'Unsupported URL scheme: {parsed.scheme!r}')
     req = urllib.request.Request(url, headers=headers or {})
     return contextlib.closing(urllib.request.urlopen(req))
 
