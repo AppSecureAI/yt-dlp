@@ -1,4 +1,5 @@
 import datetime as dt
+import os
 
 from .streaks import StreaksBaseIE
 from ..utils import (
@@ -267,6 +268,8 @@ class TVerOlympicIE(StreaksBaseIE):
 
     _API_BASE = 'https://olympic-data.tver.jp/api'
     _VALID_URL = r'https?://(?:www\.)?tver\.jp/olympic/milanocortina2026/(?P<type>live|video)/play/(?P<id>\w+)'
+    _OLYMPIC_LIVE_API_KEY = os.environ.get('TVER_OLYMPIC_LIVE_API_KEY')
+    _OLYMPIC_VIDEO_API_KEY = os.environ.get('TVER_OLYMPIC_VIDEO_API_KEY')
     _TESTS = [{
         'url': 'https://tver.jp/olympic/milanocortina2026/video/play/3b1d4462150b42558d9cc8aabb5238d0/',
         'info_dict': {
@@ -309,7 +312,11 @@ class TVerOlympicIE(StreaksBaseIE):
 
         if video_type == 'live':
             project_id = 'tver-olympic-live'
-            api_key = 'a35ebb1ca7d443758dc7fcc5d99b1f72'
+            api_key = self._OLYMPIC_LIVE_API_KEY
+            if not api_key:
+                raise ExtractorError(
+                    'TVER Olympic live API key not found. Set the TVER_OLYMPIC_LIVE_API_KEY environment variable',
+                    expected=True)
             olympic_data = traverse_obj(self._download_json(
                 f'{self._API_BASE}/live/{video_id}', video_id), ('contents', 'live', {dict}))
             media_id = traverse_obj(olympic_data, ('video_id', {str}))
@@ -346,7 +353,11 @@ class TVerOlympicIE(StreaksBaseIE):
                         'This program is no longer available', expected=True)
         else:
             project_id = 'tver-olympic'
-            api_key = '4b55a4db3cce4ad38df6dd8543e3e46a'
+            api_key = self._OLYMPIC_VIDEO_API_KEY
+            if not api_key:
+                raise ExtractorError(
+                    'TVER Olympic video API key not found. Set the TVER_OLYMPIC_VIDEO_API_KEY environment variable',
+                    expected=True)
             media_id = video_id
             live_status = 'not_live'
             olympic_data = traverse_obj(self._download_json(
