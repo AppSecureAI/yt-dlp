@@ -13,16 +13,21 @@ jobs:
     env:
       PROCESSING_MODE: group_cc
       AUTO_CREATE_PRS: "true"
+      OPENGREP_VERSION: "v1.16.1"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Run OpenGrep
+      - name: Download OpenGrep
         run: |
-          pip install opengrep
-          opengrep scan --config auto --sarif --output opengrep-results.sarif .
+          curl -sL "https://github.com/opengrep/opengrep/releases/download/${OPENGREP_VERSION}/opengrep_manylinux_x86" -o opengrep
+          chmod +x opengrep
+
+      - name: Run OpenGrep scan
+        run: |
+          ./opengrep scan --sarif --sarif-output=opengrep-results.sarif --config auto . || true
 
       - name: AppSecAI
         uses: AppSecureAI/automation-action@v1
