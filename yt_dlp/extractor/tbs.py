@@ -1,3 +1,4 @@
+import os
 import re
 import urllib.parse
 
@@ -13,9 +14,9 @@ from ..utils.traversal import traverse_obj
 
 class TBSIE(TurnerBaseIE):
     _SITE_INFO = {
-        'tbs': ('TBS', 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkZTA0NTYxZS1iMTFhLTRlYTgtYTg5NC01NjI3MGM1NmM2MWIiLCJuYmYiOjE1MzcxODkzOTAsImlzcyI6ImF1dGguYWRvYmUuY29tIiwiaWF0IjoxNTM3MTg5MzkwfQ.Z7ny66kaqNDdCHf9Y9KsV12LrBxrLkGGxlYe2XGm6qsw2T-k1OCKC1TMzeqiZP735292MMRAQkcJDKrMIzNbAuf9nCdIcv4kE1E2nqUnjPMBduC1bHffZp8zlllyrN2ElDwM8Vhwv_5nElLRwWGEt0Kaq6KJAMZA__WDxKWC18T-wVtsOZWXQpDqO7nByhfj2t-Z8c3TUNVsA_wHgNXlkzJCZ16F2b7yGLT5ZhLPupOScd3MXC5iPh19HSVIok22h8_F_noTmGzmMnIRQi6bWYWK2zC7TQ_MsYHfv7V6EaG5m1RKZTV6JAwwoJQF_9ByzarLV1DGwZxD9-eQdqswvg'),
-        'tntdrama': ('TNT', 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIwOTMxYTU4OS1jZjEzLTRmNjMtYTJmYy03MzhjMjE1NWU5NjEiLCJuYmYiOjE1MzcxOTA4MjcsImlzcyI6ImF1dGguYWRvYmUuY29tIiwiaWF0IjoxNTM3MTkwODI3fQ.AucKvtws7oekTXi80_zX4-BlgJD9GLvlOI9FlBCjdlx7Pa3eJ0AqbogynKMiatMbnLOTMHGjd7tTiq422unmZjBz70dhePAe9BbW0dIo7oQ57vZ-VBYw_tWYRPmON61MwAbLVlqROD3n_zURs85S8TlkQx9aNx9x_riGGELjd8l05CVa_pOluNhYvuIFn6wmrASOKI1hNEblBDWh468UWP571-fe4zzi0rlYeeHd-cjvtWvOB3bQsWrUVbK4pRmqvzEH59j0vNF-ihJF9HncmUicYONe47Mib3elfMok23v4dB1_UAlQY_oawfNcynmEnJQCcqFmbHdEwTW6gMiYsA'),
-        'trutv': ('truTV', 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhYzQyOTkwMi0xMDYzLTQyNTQtYWJlYS1iZTY2ODM4MTVmZGIiLCJuYmYiOjE1MzcxOTA4NjgsImlzcyI6ImF1dGguYWRvYmUuY29tIiwiaWF0IjoxNTM3MTkwODY4fQ.ewXl5LDMDvvx3nDXV4jCdSwUq_sOluKoOVsIjznAo6Zo4zrGe9rjlZ9DOmQKW66g6VRMexJsJ5vM1EkY8TC5-YcQw_BclK1FPGO1rH3Wf7tX_l0b1BVbSJQKIj9UgqDp_QbGcBXz24kN4So3U22mhs6di9PYyyfG68ccKL2iRprcVKWCslIHwUF-T7FaEqb0K57auilxeW1PONG2m-lIAcZ62DUwqXDWvw0CRoWI08aVVqkkhnXaSsQfLs5Ph1Pfh9Oq3g_epUm9Ss45mq6XM7gbOb5omTcKLADRKK-PJVB_JXnZnlsXbG0ttKE1cTKJ738qu7j4aipYTf-W0nKF5Q'),
+        'tbs': ('TBS', os.environ.get('TBS_SOFTWARE_STATEMENT')),
+        'tntdrama': ('TNT', os.environ.get('TNTDRAMA_SOFTWARE_STATEMENT')),
+        'trutv': ('truTV', os.environ.get('TRUTV_SOFTWARE_STATEMENT')),
     }
     _VALID_URL = fr'''(?x)
         https?://(?:www\.)?(?P<site>{"|".join(map(re.escape, _SITE_INFO))})\.com
