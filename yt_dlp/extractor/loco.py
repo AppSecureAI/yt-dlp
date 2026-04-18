@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import time
 
@@ -88,21 +89,23 @@ class LocoIE(InfoExtractor):
 
     # From _app.js
     _CLIENT_ID = 'TlwKp1zmF6eKFpcisn3FyR18WkhcPkZtzwPVEEC3'
-    _CLIENT_SECRET = 'Kp7tYlUN7LXvtcSpwYvIitgYcLparbtsQSe5AdyyCdiEJBP53Vt9J8eB4AsLdChIpcO2BM19RA3HsGtqDJFjWmwoonvMSG3ZQmnS8x1YIM8yl82xMXZGbE3NKiqmgBVU'
 
     def _is_jwt_expired(self, token):
         return jwt_decode_hs256(token)['exp'] - time.time() < 300
 
     def _get_access_token(self, video_id):
+        client_secret = os.environ.get('LOCO_CLIENT_SECRET')
         access_token = try_call(lambda: self._get_cookies('https://loco.com')['access_token'].value)
         if access_token and not self._is_jwt_expired(access_token):
             return access_token
+        if not client_secret:
+            return None
         access_token = traverse_obj(self._download_json(
             'https://api.getloconow.com/v3/user/device_profile/', video_id,
             'Downloading access token', fatal=False, data=json.dumps({
                 'platform': 7,
                 'client_id': self._CLIENT_ID,
-                'client_secret': self._CLIENT_SECRET,
+                'client_secret': client_secret,
                 'model': 'Mozilla',
                 'os_name': 'Win32',
                 'os_ver': '5.0 (Windows)',
@@ -113,7 +116,7 @@ class LocoIE(InfoExtractor):
                 'X-APP-LANG': 'en',
                 'X-APP-LOCALE': 'en-US',
                 'X-CLIENT-ID': self._CLIENT_ID,
-                'X-CLIENT-SECRET': self._CLIENT_SECRET,
+                'X-CLIENT-SECRET': client_secret,
                 'X-PLATFORM': '7',
             }), 'access_token')
         if access_token and not self._is_jwt_expired(access_token):
