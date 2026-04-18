@@ -122,7 +122,7 @@ def make_ssl_context(
 
     if legacy_support:
         context.options |= 4  # SSL_OP_LEGACY_SERVER_CONNECT
-        context.set_ciphers('DEFAULT')  # compat
+        context.set_ciphers('DEFAULT:!aNULL:!eNULL:!RC4:!DES:!3DES:!EXPORT:!MD5')  # compat
 
     elif ssl.OPENSSL_VERSION_INFO >= (1, 1, 1) and not ssl.OPENSSL_VERSION.startswith('LibreSSL'):
         # Use the default SSL ciphers and minimum TLS version settings from Python 3.10 [1].
