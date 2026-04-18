@@ -303,13 +303,19 @@ class TVerOlympicIE(StreaksBaseIE):
         },
     }]
 
+    _STREAKS_API_INFO = {}
+
+    def _real_initialize(self):
+        self._STREAKS_API_INFO = self._download_json(
+            'https://player.tver.jp/player/streaks_info_v2.json', None,
+            'Downloading STREAKS API info', 'Unable to download STREAKS API info')
+
     def _real_extract(self, url):
         video_type, video_id = self._match_valid_url(url).group('type', 'id')
         live_from_start = self.get_param('live_from_start')
 
         if video_type == 'live':
             project_id = 'tver-olympic-live'
-            api_key = 'a35ebb1ca7d443758dc7fcc5d99b1f72'
             olympic_data = traverse_obj(self._download_json(
                 f'{self._API_BASE}/live/{video_id}', video_id), ('contents', 'live', {dict}))
             media_id = traverse_obj(olympic_data, ('video_id', {str}))
@@ -346,17 +352,17 @@ class TVerOlympicIE(StreaksBaseIE):
                         'This program is no longer available', expected=True)
         else:
             project_id = 'tver-olympic'
-            api_key = '4b55a4db3cce4ad38df6dd8543e3e46a'
             media_id = video_id
             live_status = 'not_live'
             olympic_data = traverse_obj(self._download_json(
                 f'{self._API_BASE}/video/{video_id}', video_id), ('contents', 'video', {dict}))
 
+        key_idx = dt.datetime.fromtimestamp(time_seconds(hours=9), dt.timezone.utc).month % 6 or 6
         return {
             **self._extract_from_streaks_api(project_id, f'ref:{media_id}', {
                 'Origin': 'https://tver.jp',
                 'Referer': 'https://tver.jp/',
-                'X-Streaks-Api-Key': api_key,
+                'X-Streaks-Api-Key': self._STREAKS_API_INFO[project_id]['api_key'][f'key0{key_idx}'],
             }, live_from_start=live_from_start),
             **traverse_obj(olympic_data, {
                 'title': ('title', {clean_html}, filter),
