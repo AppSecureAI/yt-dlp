@@ -54,7 +54,7 @@ class JamendoIE(InfoExtractor):
             'https://www.jamendo.com' + path, resource_id, fatal=fatal, query={
                 'id[]': resource_id,
             }, headers={
-                'X-Jam-Call': f'${hashlib.sha1((path + rand).encode()).hexdigest()}*{rand}~',
+                'X-Jam-Call': f'${hashlib.sha256((path + rand).encode()).hexdigest()}*{rand}~',
             })[0]
 
     def _real_extract(self, url):
