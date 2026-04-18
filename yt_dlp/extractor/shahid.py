@@ -1,5 +1,6 @@
 import json
 import math
+import os
 import re
 
 from .aws import AWSIE
@@ -17,7 +18,6 @@ from ..utils import (
 
 class ShahidBaseIE(AWSIE):
     _AWS_PROXY_HOST = 'api2.shahid.net'
-    _AWS_API_KEY = '2RRtuMHx95aNI1Kvtn2rChEuwsCogUd4samGPjLh'
     _VALID_URL_BASE = r'https?://shahid\.mbc\.net/[a-z]{2}/'
 
     def _handle_error(self, e):
@@ -30,14 +30,22 @@ class ShahidBaseIE(AWSIE):
                 raise ExtractorError(faults_message, expected=True)
 
     def _call_api(self, path, video_id, request=None):
+        aws_api_key = os.environ.get('SHAHID_AWS_API_KEY')
+        access_key = os.environ.get('SHAHID_ACCESS_KEY')
+        secret_key = os.environ.get('SHAHID_SECRET_KEY')
+        if not aws_api_key or not access_key or not secret_key:
+            raise ExtractorError(
+                'Shahid extractor requires SHAHID_AWS_API_KEY, SHAHID_ACCESS_KEY, and SHAHID_SECRET_KEY environment variables',
+                expected=True)
+        self._AWS_API_KEY = aws_api_key
         query = {}
         if request:
             query['request'] = json.dumps(request)
         try:
             return self._aws_execute_api({
                 'uri': '/proxy/v2/' + path,
-                'access_key': 'AKIAI6X4TYCIXM2B7MUQ',
-                'secret_key': '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',
+                'access_key': access_key,
+                'secret_key': secret_key,
             }, video_id, query)
         except ExtractorError as e:
             if isinstance(e.cause, HTTPError):
@@ -129,8 +137,8 @@ class ShahidIE(ShahidBaseIE):
         response = self._download_json(
             f'http://api.shahid.net/api/v1_1/{page_type}/{video_id}',
             video_id, 'Downloading video JSON', query={
-                'apiKey': 'sh@hid0nlin3',
-                'hash': 'b2wMCTHpSmyxGqQjJFOycRmLSex+BpTK/ooxy6vHaqs=',
+                'apiKey': os.environ.get('SHAHID_API_KEY'),
+                'hash': os.environ.get('SHAHID_API_HASH'),
             })
         data = response.get('data', {})
         error = data.get('error')
